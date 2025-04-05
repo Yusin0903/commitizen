@@ -43,9 +43,11 @@ class ConventionalCommitsCz(BaseCommitizen):
     def questions(self) -> Questions:
         questions: Questions = [
             {
-                "type": "list",
+                "type": "select",
                 "name": "prefix",
                 "message": "Select the type of change you are committing",
+                "use_search_filter": True,
+                "use_jk_keys": False,
                 "choices": [
                     {
                         "value": "fix",
