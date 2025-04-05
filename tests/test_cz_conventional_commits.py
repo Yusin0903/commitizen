@@ -153,3 +153,23 @@ def test_process_commit(commit_message, expected_message, config):
     conventional_commits = ConventionalCommitsCz(config)
     message = conventional_commits.process_commit(commit_message)
     assert message == expected_message
+
+
+def test_search_functionality(config):
+    conventional_commits = ConventionalCommitsCz(config)
+    questions = conventional_commits.questions()
+    select_question = questions[0]
+
+    assert select_question["type"] == "select"
+    assert select_question["use_search_filter"] is True
+    assert select_question["use_jk_keys"] is False
+
+    fix_choices = [
+        choice
+        for choice in select_question["choices"]
+        if "fix" in choice["name"].lower()
+    ]
+
+    assert len(fix_choices) == 2
+    assert fix_choices[0]["value"] == "fix"
+    assert "fixes" in fix_choices[1]["name"].lower()
