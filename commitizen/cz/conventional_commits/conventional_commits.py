@@ -5,6 +5,7 @@ from commitizen import defaults
 from commitizen.cz.base import BaseCommitizen
 from commitizen.cz.utils import multiple_line_breaker, required_validator
 from commitizen.defaults import Questions
+from commitizen.config import BaseConfig
 
 __all__ = ["ConventionalCommitsCz"]
 
@@ -40,10 +41,15 @@ class ConventionalCommitsCz(BaseCommitizen):
     }
     changelog_pattern = defaults.bump_pattern
 
+    def __init__(self, config: BaseConfig):
+        super().__init__(config)
+        self.question_type = self.config.settings.get("question_type", "list")
+
     def questions(self) -> Questions:
+        # Default questions
         questions: Questions = [
             {
-                "type": "list",
+                "type": self.question_type,
                 "name": "prefix",
                 "message": "Select the type of change you are committing",
                 "choices": [
@@ -146,6 +152,9 @@ class ConventionalCommitsCz(BaseCommitizen):
                 ),
             },
         ]
+        if questions[0]["type"] == "select":
+            questions[0].update({"use_search_filter": True, "use_jk_keys": False})
+
         return questions
 
     def message(self, answers: dict) -> str:

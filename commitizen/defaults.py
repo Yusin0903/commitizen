@@ -58,6 +58,7 @@ class Settings(TypedDict, total=False):
     always_signoff: bool
     template: str | None
     extras: dict[str, Any]
+    question_type: str | None
 
 
 name: str = "cz_conventional_commits"
